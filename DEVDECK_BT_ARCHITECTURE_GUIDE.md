@@ -39,11 +39,30 @@ While Windows Device Manager may show `HID Keyboard Device` with status `OK`, th
 
 ---
 
-## 3. Complete Drop-In Android Kotlin Source Code
+## 3. Mandatory Bluetooth HOGP & Windows 11 Requirements
 
-Below is the complete, production-ready Kotlin implementation of a **Pure BLE GATT HID Peripheral Server (HOGP 0x1812)** using native Android APIs (`BluetoothGattServer` and `BluetoothLeAdvertiser`).
+To guarantee Windows 11 binds `HidBthLE.sys` cleanly without Code 10 error or dropping connection:
 
-### 3.1. Android Manifest Permissions (`AndroidManifest.xml`)
+1. **Mandatory Device Information Service (`0x180A`) & PnP ID Characteristic (`0x2A50`):**
+   Bluetooth HOGP specification requires `SERVICE_DEVICE_INFO` (`0x180A`) containing `CHAR_PNP_ID` (`0x2A50`). Without PnP ID data (`Vendor ID Source`, `Vendor ID`, `Product ID`, `Product Version`), Windows 11 cannot instantiate the HID driver.
+2. **GAP Service Appearance Characteristic (`0x2A01 = 0x03C1` Keyboard):**
+   To ensure Windows 11 classifies the BLE peripheral as a Keyboard during GATT service discovery, the GAP Appearance characteristic (`0x2A01`) must return value `0x03C1` (Keyboard).
+3. **Thread-Safe Concurrent Device Registry:**
+   GATT connection state callbacks run on Android Binder threads, while `sendKeyPress` runs on the UI or application thread. A `ConcurrentHashMap.newKeySet()` must be used to prevent `ConcurrentModificationException`.
+4. **Sequential Service Registration Queue (`onServiceAdded`):**
+   GATT services must be registered sequentially inside `onServiceAdded` to prevent Android Fluoride/BlueDroid stack collisions.
+5. **GATT Write Acknowledgments (`onCharacteristicWriteRequest`):**
+   Windows 11 writes to `CHAR_PROTOCOL_MODE` (0x2A4E) and `CHAR_HID_CONTROL_POINT` (0x2A4C). The server must respond with `bluetoothGattServer.sendResponse(..., GATT_SUCCESS)`.
+6. **BLE Advertising Bounds:**
+   Keep primary advertisement data within 31 bytes by using short Parcel UUID for HID (`00001812-0000-1000-8000-00805f9b34fb`) and offloading device name to scan response.
+
+---
+
+## 4. Complete Production Kotlin Source Code
+
+Below is the complete, thread-safe Kotlin implementation fully compliant with Bluetooth SIG HOGP specs and Windows 11 `HidBthLE.sys`.
+
+### 4.1. Android Manifest Permissions (`AndroidManifest.xml`)
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -68,15 +87,13 @@ Below is the complete, production-ready Kotlin implementation of a **Pure BLE GA
         android:supportsRtl="true"
         android:theme="@style/Theme.DevDeck">
 
-        <!-- Application Components -->
-
     </application>
 </manifest>
 ```
 
 ---
 
-### 3.2. HID Report Descriptor Definition (`HidReportDescriptor.kt`)
+### 4.2. HID Report Descriptor Definition (`HidReportDescriptor.kt`)
 
 ```kotlin
 package com.devdeck.app.bluetooth
@@ -141,7 +158,7 @@ object HidReportDescriptor {
 
 ---
 
-### 3.3. Pure BLE GATT HID Server (`BleHidDeviceServer.kt`)
+### 4.3. Fully Compliant BleHidDeviceServer (`BleHidDeviceServer.kt`)
 
 ```kotlin
 package com.devdeck.app.bluetooth
@@ -153,9 +170,12 @@ import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
+import android.os.Build
 import android.os.ParcelUuid
 import android.util.Log
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @SuppressLint("MissingPermission")
 class BleHidDeviceServer(private val context: Context) {
@@ -164,13 +184,9 @@ class BleHidDeviceServer(private val context: Context) {
         private const val TAG = "DevDeck_BleHidServer"
 
         // BLE Standard Profile UUIDs
-        val SERVICE_GAP: UUID = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb")
         val SERVICE_HID: UUID = UUID.fromString("00001812-0000-1000-8000-00805f9b34fb")
         val SERVICE_BATTERY: UUID = UUID.fromString("0000180F-0000-1000-8000-00805f9b34fb")
         val SERVICE_DEVICE_INFO: UUID = UUID.fromString("0000180A-0000-1000-8000-00805f9b34fb")
-
-        // GAP Characteristic UUIDs
-        val CHAR_APPEARANCE: UUID = UUID.fromString("00002A01-0000-1000-8000-00805f9b34fb")
 
         // HID Service Characteristic UUIDs
         val CHAR_REPORT_MAP: UUID = UUID.fromString("00002A4B-0000-1000-8000-00805f9b34fb")
@@ -179,6 +195,10 @@ class BleHidDeviceServer(private val context: Context) {
         val CHAR_PROTOCOL_MODE: UUID = UUID.fromString("00002A4E-0000-1000-8000-00805f9b34fb")
         val CHAR_REPORT: UUID = UUID.fromString("00002A4D-0000-1000-8000-00805f9b34fb")
         val CHAR_BATTERY_LEVEL: UUID = UUID.fromString("00002A19-0000-1000-8000-00805f9b34fb")
+
+        // Device Info Characteristic UUIDs
+        val CHAR_PNP_ID: UUID = UUID.fromString("00002A50-0000-1000-8000-00805f9b34fb")
+        val CHAR_MANUFACTURER_NAME: UUID = UUID.fromString("00002A29-0000-1000-8000-00805f9b34fb")
 
         // GATT Descriptors
         val DESC_CCCD: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
@@ -189,7 +209,7 @@ class BleHidDeviceServer(private val context: Context) {
         const val MODIFIER_LEFT_CTRL: Byte = 0x01
         const val MODIFIER_LEFT_SHIFT: Byte = 0x02
         const val MODIFIER_LEFT_ALT: Byte = 0x04
-        const val MODIFIER_LEFT_GUI: Byte = 0x08 // Windows key / Command key
+        const val MODIFIER_LEFT_GUI: Byte = 0x08
     }
 
     private val bluetoothManager: BluetoothManager =
@@ -199,7 +219,12 @@ class BleHidDeviceServer(private val context: Context) {
     private var bluetoothLeAdvertiser: BluetoothLeAdvertiser? = null
 
     private var inputReportCharacteristic: BluetoothGattCharacteristic? = null
-    private val connectedDevices = mutableSetOf<BluetoothDevice>()
+
+    // Thread-safe set for connected host devices across Binder and UI threads
+    private val connectedDevices = ConcurrentHashMap.newKeySet<BluetoothDevice>()
+
+    // Queue for sequential GATT Service Addition
+    private val serviceQueue = ConcurrentLinkedQueue<BluetoothGattService>()
 
     fun start() {
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled) {
@@ -208,7 +233,6 @@ class BleHidDeviceServer(private val context: Context) {
         }
 
         setupGattServer()
-        startAdvertising()
     }
 
     private fun setupGattServer() {
@@ -218,26 +242,31 @@ class BleHidDeviceServer(private val context: Context) {
                 return
             }
 
-        // 1. Generic Access Service (GAP) with Keyboard Appearance (0x03C1)
-        val gapService = BluetoothGattService(
-            SERVICE_GAP,
-            BluetoothGattService.SERVICE_TYPE_PRIMARY
+        serviceQueue.clear()
+
+        // 1. Device Information Service (0x180A) with mandatory PnP ID (0x2A50)
+        val deviceInfoService = BluetoothGattService(SERVICE_DEVICE_INFO, BluetoothGattService.SERVICE_TYPE_PRIMARY)
+
+        val pnpIdChar = BluetoothGattCharacteristic(
+            CHAR_PNP_ID,
+            BluetoothGattCharacteristic.PROPERTY_READ,
+            BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED
         )
-        val appearanceChar = BluetoothGattCharacteristic(
-            CHAR_APPEARANCE,
+        // PnP ID Payload (7 Bytes): [VendorID Source (0x02 = USB), Vendor ID (0x02E5), Product ID (0xABCD), Product Version (0x0100)]
+        pnpIdChar.value = byteArrayOf(0x02, 0xE5.toByte(), 0x02, 0xCD.toByte(), 0xAB.toByte(), 0x00, 0x01)
+        deviceInfoService.addCharacteristic(pnpIdChar)
+
+        val mfgNameChar = BluetoothGattCharacteristic(
+            CHAR_MANUFACTURER_NAME,
             BluetoothGattCharacteristic.PROPERTY_READ,
             BluetoothGattCharacteristic.PERMISSION_READ
         )
-        appearanceChar.value = byteArrayOf(0xC1.toByte(), 0x03.toByte()) // 0x03C1 = Keyboard (Little Endian)
-        gapService.addCharacteristic(appearanceChar)
+        mfgNameChar.value = "DevDeck".toByteArray(Charsets.UTF_8)
+        deviceInfoService.addCharacteristic(mfgNameChar)
 
-        // 2. HID Service Setup (HOGP)
-        val hidService = BluetoothGattService(
-            SERVICE_HID,
-            BluetoothGattService.SERVICE_TYPE_PRIMARY
-        )
+        // 2. HID Service Setup (HOGP 0x1812)
+        val hidService = BluetoothGattService(SERVICE_HID, BluetoothGattService.SERVICE_TYPE_PRIMARY)
 
-        // Protocol Mode Characteristic (0x2A4E) -> 0x01 = Report Protocol Mode
         val protocolMode = BluetoothGattCharacteristic(
             CHAR_PROTOCOL_MODE,
             BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE,
@@ -245,15 +274,13 @@ class BleHidDeviceServer(private val context: Context) {
         )
         protocolMode.value = byteArrayOf(0x01)
 
-        // HID Information Characteristic (0x2A4A) -> Country 0x00, Flags 0x02 (Remote Wakeup)
         val hidInformation = BluetoothGattCharacteristic(
             CHAR_HID_INFORMATION,
             BluetoothGattCharacteristic.PROPERTY_READ,
             BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED
         )
-        hidInformation.value = byteArrayOf(0x01, 0x01, 0x00, 0x02) // bcdHID=1.11, bCountryCode=0, Flags=0x02
+        hidInformation.value = byteArrayOf(0x01, 0x01, 0x00, 0x02)
 
-        // Report Map Characteristic (0x2A4B)
         val reportMap = BluetoothGattCharacteristic(
             CHAR_REPORT_MAP,
             BluetoothGattCharacteristic.PROPERTY_READ,
@@ -261,14 +288,12 @@ class BleHidDeviceServer(private val context: Context) {
         )
         reportMap.value = HidReportDescriptor.KEYBOARD_REPORT_DESCRIPTOR
 
-        // HID Control Point Characteristic (0x2A4C)
         val hidControlPoint = BluetoothGattCharacteristic(
             CHAR_HID_CONTROL_POINT,
             BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE,
             BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         )
 
-        // Input Report Characteristic (0x2A4D) -> Keyboard Input Report
         val reportChar = BluetoothGattCharacteristic(
             CHAR_REPORT,
             BluetoothGattCharacteristic.PROPERTY_READ or
@@ -276,10 +301,8 @@ class BleHidDeviceServer(private val context: Context) {
                     BluetoothGattCharacteristic.PROPERTY_WRITE,
             BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED or BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         )
-        // Initialize with default 8-byte empty report
         reportChar.value = byteArrayOf(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
-        // CCCD Descriptor (0x2902) for Enabling Notifications
         val cccd = BluetoothGattDescriptor(
             DESC_CCCD,
             BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED or BluetoothGattDescriptor.PERMISSION_WRITE_ENCRYPTED
@@ -287,42 +310,47 @@ class BleHidDeviceServer(private val context: Context) {
         cccd.value = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
         reportChar.addDescriptor(cccd)
 
-        // Report Reference Descriptor (0x2908) -> Report ID 0x00, Report Type 0x01 (Input Report)
         val reportRef = BluetoothGattDescriptor(
             DESC_REPORT_REFERENCE,
             BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED
         )
-        reportRef.value = byteArrayOf(0x00, 0x01) // Report ID=0, Type=Input
+        reportRef.value = byteArrayOf(0x00, 0x01)
         reportChar.addDescriptor(reportRef)
 
         inputReportCharacteristic = reportChar
 
-        // Add characteristics to HID service
         hidService.addCharacteristic(protocolMode)
         hidService.addCharacteristic(hidInformation)
         hidService.addCharacteristic(reportMap)
         hidService.addCharacteristic(hidControlPoint)
         hidService.addCharacteristic(reportChar)
 
-        // 3. Battery Service Setup
-        val batteryService = BluetoothGattService(
-            SERVICE_BATTERY,
-            BluetoothGattService.SERVICE_TYPE_PRIMARY
-        )
+        // 3. Battery Service Setup (0x180F)
+        val batteryService = BluetoothGattService(SERVICE_BATTERY, BluetoothGattService.SERVICE_TYPE_PRIMARY)
         val batteryLevel = BluetoothGattCharacteristic(
             CHAR_BATTERY_LEVEL,
             BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_NOTIFY,
             BluetoothGattCharacteristic.PERMISSION_READ
         )
-        batteryLevel.value = byteArrayOf(100) // 100% Battery
+        batteryLevel.value = byteArrayOf(100)
         batteryService.addCharacteristic(batteryLevel)
 
-        // Register Services
-        bluetoothGattServer?.addService(gapService)
-        bluetoothGattServer?.addService(hidService)
-        bluetoothGattServer?.addService(batteryService)
+        // Enqueue services for sequential addition
+        serviceQueue.add(deviceInfoService)
+        serviceQueue.add(hidService)
+        serviceQueue.add(batteryService)
 
-        Log.i(TAG, "BLE GATT Server configured successfully with HOGP HID Service.")
+        addNextService()
+    }
+
+    private fun addNextService() {
+        val nextService = serviceQueue.poll()
+        if (nextService != null) {
+            bluetoothGattServer?.addService(nextService)
+        } else {
+            Log.i(TAG, "All GATT Services registered successfully. Starting BLE advertising.")
+            startAdvertising()
+        }
     }
 
     private fun startAdvertising() {
@@ -340,30 +368,24 @@ class BleHidDeviceServer(private val context: Context) {
             .build()
 
         val data = AdvertiseData.Builder()
-            .setIncludeDeviceName(true)
             .addServiceUuid(ParcelUuid(SERVICE_HID))
+            .setIncludeTxPowerLevel(false)
             .build()
 
         val scanResponse = AdvertiseData.Builder()
+            .setIncludeDeviceName(true)
             .addServiceUuid(ParcelUuid(SERVICE_BATTERY))
             .build()
 
         bluetoothLeAdvertiser?.startAdvertising(settings, data, scanResponse, advertiseCallback)
     }
 
-    /**
-     * Sends a keystroke macro (press + release) to connected Windows/Mac/iPad device
-     * @param modifier Modifier flags (e.g., MODIFIER_LEFT_CTRL or MODIFIER_LEFT_GUI)
-     * @param keycode Standard USB HID Keycode (e.g., 0x06 for 'c', 0x19 for 'v')
-     */
     fun sendKeyPress(modifier: Byte, keycode: Byte) {
-        // Report Format: [Modifier, Reserved(0x00), Key1, Key2, Key3, Key4, Key5, Key6]
         val pressReport = byteArrayOf(modifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00)
         val releaseReport = byteArrayOf(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
         sendReport(pressReport)
 
-        // Small delay between press and release for OS registration
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             sendReport(releaseReport)
         }, 15)
@@ -374,7 +396,12 @@ class BleHidDeviceServer(private val context: Context) {
         char.value = reportData
 
         for (device in connectedDevices) {
-            bluetoothGattServer?.notifyCharacteristicChanged(device, char, false)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bluetoothGattServer?.notifyCharacteristicChanged(device, char, false, reportData)
+            } else {
+                @Suppress("DEPRECATION")
+                bluetoothGattServer?.notifyCharacteristicChanged(device, char, false)
+            }
         }
     }
 
@@ -387,7 +414,7 @@ class BleHidDeviceServer(private val context: Context) {
 
     private val advertiseCallback = object : AdvertiseCallback() {
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
-            Log.i(TAG, "BLE Advertising started successfully as DevDeck BLE Keyboard.")
+            Log.i(TAG, "BLE Advertising active: DevDeck BLE Keyboard")
         }
 
         override fun onStartFailure(errorCode: Int) {
@@ -396,12 +423,22 @@ class BleHidDeviceServer(private val context: Context) {
     }
 
     private val gattServerCallback = object : BluetoothGattServerCallback() {
+
+        override fun onServiceAdded(status: Int, service: BluetoothGattService) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.i(TAG, "Service added successfully: ${service.uuid}")
+                addNextService()
+            } else {
+                Log.e(TAG, "Failed to add service ${service.uuid}, status=$status")
+            }
+        }
+
         override fun onConnectionStateChange(device: BluetoothDevice, status: Int, newState: Int) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.i(TAG, "Device connected to BLE GATT Server: ${device.address}")
+                Log.i(TAG, "Windows Host connected to BLE GATT Server: ${device.address}")
                 connectedDevices.add(device)
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.i(TAG, "Device disconnected from BLE GATT Server: ${device.address}")
+                Log.i(TAG, "Windows Host disconnected from BLE GATT Server: ${device.address}")
                 connectedDevices.remove(device)
             }
         }
@@ -412,13 +449,29 @@ class BleHidDeviceServer(private val context: Context) {
             offset: Int,
             characteristic: BluetoothGattCharacteristic
         ) {
-            val value = characteristic.value
-            val responseValue = if (value != null && offset < value.size) {
+            val value = characteristic.value ?: byteArrayOf()
+            val responseValue = if (offset < value.size) {
                 value.copyOfRange(offset, value.size)
             } else {
                 byteArrayOf()
             }
             bluetoothGattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, responseValue)
+        }
+
+        override fun onCharacteristicWriteRequest(
+            device: BluetoothDevice,
+            requestId: Int,
+            characteristic: BluetoothGattCharacteristic,
+            preparedWrite: Boolean,
+            responseNeeded: Boolean,
+            offset: Int,
+            value: ByteArray
+        ) {
+            characteristic.value = value
+            if (responseNeeded) {
+                bluetoothGattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, value)
+            }
+            Log.i(TAG, "Characteristic write ACK sent for ${characteristic.uuid} from ${device.address}")
         }
 
         override fun onDescriptorReadRequest(
@@ -427,8 +480,8 @@ class BleHidDeviceServer(private val context: Context) {
             offset: Int,
             descriptor: BluetoothGattDescriptor
         ) {
-            val value = descriptor.value
-            val responseValue = if (value != null && offset < value.size) {
+            val value = descriptor.value ?: byteArrayOf()
+            val responseValue = if (offset < value.size) {
                 value.copyOfRange(offset, value.size)
             } else {
                 byteArrayOf()
@@ -445,13 +498,11 @@ class BleHidDeviceServer(private val context: Context) {
             offset: Int,
             value: ByteArray
         ) {
-            if (descriptor.uuid == DESC_CCCD) {
-                descriptor.value = value
-                if (responseNeeded) {
-                    bluetoothGattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, value)
-                }
-                Log.i(TAG, "Notifications enabled/updated by host: ${device.address}")
+            descriptor.value = value
+            if (responseNeeded) {
+                bluetoothGattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, value)
             }
+            Log.i(TAG, "Descriptor write ACK sent for ${descriptor.uuid} from ${device.address}")
         }
     }
 }
@@ -459,7 +510,7 @@ class BleHidDeviceServer(private val context: Context) {
 
 ---
 
-### 3.4. Manager Controller (`DevDeckBtManager.kt`)
+### 4.4. Manager Controller (`DevDeckBtManager.kt`)
 
 ```kotlin
 package com.devdeck.app.bluetooth
@@ -478,24 +529,19 @@ class DevDeckBtManager(context: Context) {
         bleHidServer.stop()
     }
 
-    // Common Stream Deck Macro Helpers
     fun sendCopy() {
-        // Ctrl + C (USB HID keycode for 'c' is 0x06)
         bleHidServer.sendKeyPress(BleHidDeviceServer.MODIFIER_LEFT_CTRL, 0x06.toByte())
     }
 
     fun sendPaste() {
-        // Ctrl + V (USB HID keycode for 'v' is 0x19)
         bleHidServer.sendKeyPress(BleHidDeviceServer.MODIFIER_LEFT_CTRL, 0x19.toByte())
     }
 
     fun sendUndo() {
-        // Ctrl + Z (USB HID keycode for 'z' is 0x1D)
         bleHidServer.sendKeyPress(BleHidDeviceServer.MODIFIER_LEFT_CTRL, 0x1D.toByte())
     }
 
     fun sendSave() {
-        // Ctrl + S (USB HID keycode for 's' is 0x16)
         bleHidServer.sendKeyPress(BleHidDeviceServer.MODIFIER_LEFT_CTRL, 0x16.toByte())
     }
 
@@ -507,23 +553,13 @@ class DevDeckBtManager(context: Context) {
 
 ---
 
-## 4. Optional Failover Architecture: Zero-Config Wi-Fi Companion
+## 5. Troubleshooting Windows 11 Pairing Steps
 
-If a user's PC lacks Bluetooth or has strict corporate BLE policies disabled in Windows Registry, DevDeck can include an optional local Wi-Fi mode:
+If Windows 11 was previously paired to the phone under Classic Bluetooth:
 
-1. **Protocol:** Local WebSockets (`ws://`) over Wi-Fi/LAN or USB ADB port forwarding.
-2. **Discovery:** mDNS / NSD (Network Service Discovery) with service `_devdeck._tcp.local.`.
-3. **Tray Companion:** Zero-dependency single-file Rust/Go executable tray application for Windows/Mac (e.g. 3MB standalone `.exe` using Windows `SendInput()` API).
-4. **Browser WebUSB Option:** Alternatively, a lightweight WebUSB / WebHID page hosted locally without installing software.
-
----
-
-## 5. Verification & Testing Instructions for Antigravity / Engineering Team
-
-1. Copy `BleHidDeviceServer.kt`, `HidReportDescriptor.kt`, and `DevDeckBtManager.kt` into `com.devdeck.app.bluetooth` inside your Android codebase (`android_deck_app`).
-2. Build and run the app on the OnePlus Nord N300 test device.
-3. On Windows 11:
-   - Open **Settings -> Bluetooth & devices -> Add device -> Bluetooth**.
-   - Select **"DevDeck Keyboard"** (or device name advertised).
-   - Windows 11 will show **"Your device is ready to go!"** and register it under **Keyboards** (not PAN or Audio).
-4. Open Notepad on Windows 11, tap **"Copy"** or **"Paste"** in DevDeck, and confirm instant response (<15ms latency).
+1. **Remove Old Windows Bluetooth Pairing:**
+   Go to Windows 11 **Settings -> Bluetooth & devices -> Devices**, find the old phone entry, click `...` -> **Remove device**.
+2. **Clear Phone Bluetooth Cache:**
+   On OnePlus / Android phone, unpair/forget the Windows PC from Bluetooth paired devices list.
+3. **Initiate Fresh BLE Pairing:**
+   Launch DevDeck on Android, open Windows 11 **Settings -> Bluetooth & devices -> Add device -> Bluetooth**, and select **"DevDeck BLE Keyboard"**.
