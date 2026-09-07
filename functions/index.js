@@ -41,31 +41,36 @@ app.post("/transcribeAndTranslateAudio", async (req, res) => {
     const userRef = db.collection("users").doc(uid);
 
     // 2. Credit Verification & Deduction (Atomic Transaction)
+    // If user document does not exist, auto-provision with default 10 credits
     let remainingCredits = 0;
     try {
       await db.runTransaction(async (transaction) => {
         const userDoc = await transaction.get(userRef);
+        let credits = 10;
+
         if (!userDoc.exists) {
-          throw { status: 404, message: "User profile not found" };
+          // Auto-provision user document with 10 default credits
+          transaction.set(userRef, {
+            credits: 9,
+            createdAt: admin.firestore.FieldValue.serverTimestamp()
+          });
+          remainingCredits = 9;
+        } else {
+          credits = userDoc.data().credits ?? 10;
+          if (credits <= 0) {
+            throw { status: 402, message: "Insufficient credits" };
+          }
+
+          transaction.update(userRef, {
+            credits: admin.firestore.FieldValue.increment(-1)
+          });
+
+          remainingCredits = credits - 1;
         }
-
-        const credits = userDoc.data().credits || 0;
-        if (credits <= 0) {
-          throw { status: 402, message: "Insufficient credits" };
-        }
-
-        transaction.update(userRef, {
-          credits: admin.firestore.FieldValue.increment(-1)
-        });
-
-        remainingCredits = credits - 1;
       });
     } catch (txError) {
       if (txError.status === 402) {
         return res.status(402).json({ success: false, error: "Insufficient credits" });
-      }
-      if (txError.status === 404) {
-        return res.status(404).json({ success: false, error: txError.message });
       }
       throw txError;
     }
@@ -81,7 +86,7 @@ app.post("/transcribeAndTranslateAudio", async (req, res) => {
     const openAiApiKey = process.env.OPENAI_API_KEY;
 
     if (!openAiApiKey) {
-      return res.status(500).json({ success: false, error: "Server configuration error: Missing OpenAI API Key" });
+      return res.status(500).json({ success: false, error: "Server configuration error: Missing OPENAI_API_KEY" });
     }
 
     const openai = new OpenAI({ apiKey: openAiApiKey });

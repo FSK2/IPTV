@@ -17,6 +17,11 @@ class AudioRecordingManager(private val context: Context) {
         private const val TEMP_FILE_NAME = "temp_recording.m4a"
     }
 
+    /**
+     * Starts MediaRecorder to capture raw mic audio directly to AAC/M4A format (128kbps, 44.1kHz).
+     * Any existing on-device SpeechRecognizer session should be stopped prior to calling start()
+     * to avoid microphone hardware lock conflicts.
+     */
     fun start(): File? {
         if (isRecording) {
             stop()
@@ -42,7 +47,7 @@ class AudioRecordingManager(private val context: Context) {
                 prepare()
                 start()
                 isRecording = true
-                Log.d(TAG, "Recording started: ${outputFile?.absolutePath}")
+                Log.d(TAG, "Recording started successfully: ${outputFile?.absolutePath}")
             } catch (e: Exception) {
                 Log.e(TAG, "MediaRecorder prepare/start failed", e)
                 releaseRecorder()
@@ -51,6 +56,19 @@ class AudioRecordingManager(private val context: Context) {
         }
 
         return outputFile
+    }
+
+    /**
+     * Returns maximum amplitude recorded since the last call to track live waveform amplitude.
+     */
+    fun getMaxAmplitude(): Int {
+        if (!isRecording || mediaRecorder == null) return 0
+        return try {
+            mediaRecorder?.maxAmplitude ?: 0
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting max amplitude from MediaRecorder", e)
+            0
+        }
     }
 
     fun stop(): File? {
