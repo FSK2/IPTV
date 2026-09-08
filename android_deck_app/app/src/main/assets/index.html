@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DevDeck Media Studio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 16px;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00e676;
+        }
+
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .deck-btn {
+            background-color: #1e1e1e;
+            border: 2px solid #333333;
+            border-radius: 12px;
+            padding: 20px 10px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color 0.1s, transform 0.05s;
+        }
+
+        .deck-btn:active {
+            background-color: #333333;
+            transform: scale(0.96);
+            border-color: #00e676;
+        }
+
+        .deck-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .scrub-btn {
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: #2a1b3d;
+            border-color: #6200ee;
+        }
+
+        .scrub-btn:active {
+            background-color: #3700b3;
+        }
+
+        .status-bar {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DevDeck Media Studio</h1>
+
+    <div class="deck-grid">
+        <!-- Media Playback Buttons -->
+        <button class="deck-btn" id="btn-play" onclick="sendMediaCommand('play')">
+            <span class="icon">▶</span>
+            <span>Play</span>
+        </button>
+
+        <button class="deck-btn" id="btn-pause" onclick="sendMediaCommand('pause')">
+            <span class="icon">⏸</span>
+            <span>Pause</span>
+        </button>
+
+        <button class="deck-btn" id="btn-stop" onclick="sendMediaCommand('stop')">
+            <span class="icon">⏹</span>
+            <span>Stop</span>
+        </button>
+
+        <!-- Volume Controls -->
+        <button class="deck-btn" id="btn-vol-up" onclick="sendMediaCommand('vol_up')">
+            <span class="icon">🔊</span>
+            <span>Vol +</span>
+        </button>
+
+        <button class="deck-btn" id="btn-vol-down" onclick="sendMediaCommand('vol_down')">
+            <span class="icon">🔉</span>
+            <span>Vol -</span>
+        </button>
+
+        <button class="deck-btn" id="btn-mute" onclick="sendMediaCommand('mute')">
+            <span class="icon">🔇</span>
+            <span>Mute</span>
+        </button>
+
+        <button class="deck-btn" id="btn-vol-max" onclick="sendMediaCommand('vol_max')">
+            <span class="icon">🔊 ⚡</span>
+            <span>Vol 100%</span>
+        </button>
+
+        <button class="deck-btn" id="btn-vol-zero" onclick="sendMediaCommand('vol_zero')">
+            <span class="icon">🔇 ⚡</span>
+            <span>Vol 0%</span>
+        </button>
+
+        <!-- Immediate Seek Buttons -->
+        <button class="deck-btn" onclick="sendSeekCommand(-15)">
+            <span class="icon">⏪</span>
+            <span>-15s</span>
+        </button>
+
+        <button class="deck-btn" onclick="sendSeekCommand(15)">
+            <span class="icon">⏩</span>
+            <span>+15s</span>
+        </button>
+
+        <!-- Continuous Scrub Buttons (Bug 5 Fix applied) -->
+        <button class="deck-btn scrub-btn" id="btn-scrub-back"
+                style="touch-action: none; user-select: none; -webkit-user-select: none;"
+                onpointerdown="handleSeekStart(-60, event)"
+                onpointerup="handleSeekEnd(-60, event)"
+                onpointercancel="handleSeekCancel(-60, event)"
+                onmouseleave="handleSeekCancel(-60, event)">
+            <span class="icon">⏮</span>
+            <span>-60s SCRUB</span>
+        </button>
+
+        <button class="deck-btn scrub-btn" id="btn-scrub-fwd"
+                style="touch-action: none; user-select: none; -webkit-user-select: none;"
+                onpointerdown="handleSeekStart(60, event)"
+                onpointerup="handleSeekEnd(60, event)"
+                onpointercancel="handleSeekCancel(60, event)"
+                onmouseleave="handleSeekCancel(60, event)">
+            <span class="icon">⏭</span>
+            <span>+60s SCRUB</span>
+        </button>
+    </div>
+
+    <div class="status-bar" id="status">Ready</div>
+
+    <script>
+        let seekInterval = null;
+
+        function updateStatus(msg) {
+            document.getElementById('status').innerText = msg;
+        }
+
+        function sendMediaCommand(cmd) {
+            updateStatus("Action: " + cmd);
+            if (window.AndroidBridge && window.AndroidBridge.handleMediaCommand) {
+                window.AndroidBridge.handleMediaCommand(cmd);
+            } else {
+                console.log("Bridge action:", cmd);
+            }
+        }
+
+        function sendSeekCommand(seconds) {
+            updateStatus("Seek: " + seconds + "s");
+            if (window.AndroidBridge && window.AndroidBridge.handleSeek) {
+                window.AndroidBridge.handleSeek(seconds);
+            } else {
+                console.log("Bridge seek:", seconds);
+            }
+        }
+
+        function handleSeekStart(direction, e) {
+            if (e && e.target && e.target.setPointerCapture) {
+                try {
+                    e.target.setPointerCapture(e.pointerId);
+                } catch (err) {
+                    console.warn("Pointer capture failed:", err);
+                }
+            }
+            sendSeekCommand(direction);
+            if (seekInterval) clearInterval(seekInterval);
+            seekInterval = setInterval(() => {
+                sendSeekCommand(direction);
+            }, 500);
+        }
+
+        function handleSeekEnd(direction, e) {
+            if (seekInterval) {
+                clearInterval(seekInterval);
+                seekInterval = null;
+            }
+            if (e && e.target && e.target.releasePointerCapture) {
+                try {
+                    e.target.releasePointerCapture(e.pointerId);
+                } catch (err) {
+                    console.warn("Release pointer capture failed:", err);
+                }
+            }
+            updateStatus("Scrub released");
+        }
+
+        function handleSeekCancel(direction, e) {
+            handleSeekEnd(direction, e);
+        }
+    </script>
+</body>
+</html>
