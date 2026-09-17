@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e1726"/>
+      <stop offset="100%" stop-color="#070c16"/>
+    </linearGradient>
+    <linearGradient id="cmdGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#68f0be"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Rounded Chassis Card -->
+  <rect x="4" y="4" width="100" height="100" rx="26" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+  <!-- Glowing Neon Border Inset -->
+  <rect x="8" y="8" width="92" height="92" rx="22" fill="none" stroke="url(#cmdGrad)" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Corner Tech Reticles -->
+  <path d="M 16 26 L 16 16 L 26 16" fill="none" stroke="#68f0be" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 82 16 L 92 16 L 92 26" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 16 82 L 16 92 L 26 92" fill="none" stroke="#68f0be" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 82 92 L 92 92 L 92 82" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Command Key Symbol (⌘) Glowing Neon -->
+  <g filter="url(#glow)">
+    <path d="M 42,42 L 42,34 A 8,8 0 1,1 34,42 L 42,42 L 66,42 L 74,42 A 8,8 0 1,1 66,34 L 66,42 L 66,66 L 66,74 A 8,8 0 1,1 74,66 L 66,66 L 42,66 L 34,66 A 8,8 0 1,1 42,74 L 42,66 Z"
+          fill="none"
+          stroke="url(#cmdGrad)"
+          stroke-width="5.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- Live Signal Emerald Dot -->
+  <circle cx="86" cy="22" r="3.5" fill="#34d399"/>
+</svg>

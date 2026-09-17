@@ -1,0 +1,420 @@
+<!-- ======================================================= -->
+<!-- DEVDECK STUDIO v2.0 // CAARD INLINE EMBED WIDGET       -->
+<!-- Paste directly into Caard: Add Element > Embed > Inline -->
+<!-- ======================================================= -->
+
+<div id="devdeck-embed-wrapper">
+  <div class="dd-card">
+    <!-- Header Badge -->
+    <div class="dd-header">
+      <div class="dd-badge">
+        <span class="dd-pulse"></span>
+        <span class="dd-version">v2.0 STABLE // UPDATED BUILD</span>
+      </div>
+      <div class="dd-brand">Mobile One Media Services</div>
+    </div>
+
+    <!-- Title & Subtitle -->
+    <h3 class="dd-title">DevDeck Studio</h3>
+    <p class="dd-desc">
+      Universal 24-Key Tactile Controller for Windows PC &amp; Mac. Direct YouTube Studio control, 23 workspace profiles, and zero-drop Wi-Fi synchronization.
+    </p>
+
+    <!-- Store Launch Badges (App Links Held for Official Store Launch) -->
+    <div class="dd-btn-group">
+      <div class="dd-btn dd-btn-primary" style="opacity: 0.95; cursor: default;">
+        <svg class="dd-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.401H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.799"/>
+        </svg>
+        <div class="dd-btn-text">
+          <span class="dd-btn-label">Microsoft Store</span>
+          <span class="dd-btn-sub">Coming Soon // Windows Edition</span>
+        </div>
+      </div>
+
+      <div class="dd-btn dd-btn-secondary" style="opacity: 0.95; cursor: default;">
+        <svg class="dd-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4128 13.8533 8.1 12 8.1s-3.5902.3128-5.1367.8497L4.841 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+        </svg>
+        <div class="dd-btn-text">
+          <span class="dd-btn-label">Google Play Store</span>
+          <span class="dd-btn-sub">Coming Soon // Android Edition</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Interactive Preview Matrix -->
+    <div class="dd-preview-section">
+      <div class="dd-preview-header">
+        <span>⚡ LIVE TACTILE KEY PREVIEW</span>
+        <span class="dd-tag">CLICK KEYS TO TEST</span>
+      </div>
+
+      <div class="dd-grid">
+        <!-- Search Menu (New) -->
+        <button type="button" class="dd-key" onclick="ddSimulateKey('Win+S Search Menu', 'search')">
+          <div class="dd-k-top"><span>22</span><span class="dd-k-sc">⊞S</span></div>
+          <div class="dd-k-icon">🔍</div>
+          <div class="dd-k-name">SEARCH</div>
+        </button>
+
+        <!-- Settings Menu (New) -->
+        <button type="button" class="dd-key" onclick="ddSimulateKey('Win+I Settings Menu', 'settings')">
+          <div class="dd-k-top"><span>24</span><span class="dd-k-sc">⊞I</span></div>
+          <div class="dd-k-icon">⚙️</div>
+          <div class="dd-k-name">SETTINGS</div>
+        </button>
+
+        <!-- YouTube Save to Playlist (Fixed) -->
+        <button type="button" class="dd-key dd-key-yt" onclick="ddSimulateKey('YouTube: Save to Playlist [UI]', 'yt_save')">
+          <div class="dd-k-top"><span>YT</span><span class="dd-k-sc">SAVE</span></div>
+          <div class="dd-k-icon">💾</div>
+          <div class="dd-k-name">SAVE LIST</div>
+        </button>
+
+        <!-- YouTube Like -->
+        <button type="button" class="dd-key dd-key-yt" onclick="ddSimulateKey('YouTube: Liked Video [UI]', 'yt_like')">
+          <div class="dd-k-top"><span>YT</span><span class="dd-k-sc">LIKE</span></div>
+          <div class="dd-k-icon">👍</div>
+          <div class="dd-k-name">LIKE</div>
+        </button>
+
+        <!-- Snip Tool -->
+        <button type="button" class="dd-key" onclick="ddSimulateKey('Win+Shift+S Snip Tool', 'snip')">
+          <div class="dd-k-top"><span>19</span><span class="dd-k-sc">⊞⇧S</span></div>
+          <div class="dd-k-icon">✂️</div>
+          <div class="dd-k-name">SNIP</div>
+        </button>
+
+        <!-- Desktop -->
+        <button type="button" class="dd-key" onclick="ddSimulateKey('Win+D Show Desktop', 'desktop')">
+          <div class="dd-k-top"><span>20</span><span class="dd-k-sc">⊞D</span></div>
+          <div class="dd-k-icon">🖥️</div>
+          <div class="dd-k-name">DESKTOP</div>
+        </button>
+      </div>
+
+      <!-- Realtime Simulated HUD Output -->
+      <div class="dd-hud">
+        <span class="dd-hud-prompt">&gt;</span>
+        <span id="dd-hud-text">DISPATCH READY: DevDeck Studio companion online. Tap any key above...</span>
+        <span class="dd-hud-ms" id="dd-hud-ms">0ms</span>
+      </div>
+    </div>
+
+    <!-- Feature Pills Footer -->
+    <div class="dd-pills">
+      <span class="dd-pill">✓ YouTube Dropdown Menu Sync</span>
+      <span class="dd-pill">✓ Win+S &amp; Win+A Native Keys</span>
+      <span class="dd-pill">✓ 24 Master Workspaces</span>
+      <span class="dd-pill">✓ DevDrop Wireless File Stream</span>
+      <span class="dd-pill">✓ Pure Win32 Zero-Drop Engine</span>
+    </div>
+
+    <!-- Agency Developer Credit Footer -->
+    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(148, 163, 184, 0.2); text-align: center; font-size: 11.5px; font-family: 'JetBrains Mono', Consolas, monospace; color: #34d399; line-height: 1.6;">
+      website developed by , Mobile One Media Services , <a href="https://www.mobileonemedia.com" target="_blank" style="color: #6ee7b7; text-decoration: underline;">https://www.mobileonemedia.com</a>  , <a href="mailto:info@mobileonemedia.com" style="color: #6ee7b7; text-decoration: underline;">info@mobileonemedia.com</a> call : <a href="tel:+923486567127" style="color: #6ee7b7; text-decoration: underline;">+923486567127</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  #devdeck-embed-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "JetBrains Mono", monospace, sans-serif;
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  #devdeck-embed-wrapper * {
+    box-sizing: border-box;
+  }
+  .dd-card {
+    background: linear-gradient(145deg, #0e1322, #080c16);
+    border: 1px solid rgba(76, 215, 246, 0.25);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(76, 215, 246, 0.08);
+  }
+  .dd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .dd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .dd-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
+    animation: ddPulse 1.8s infinite;
+  }
+  @keyframes ddPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  .dd-version {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #34d399;
+    letter-spacing: 0.5px;
+  }
+  .dd-brand {
+    font-size: 11px;
+    color: #64748b;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .dd-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    background: linear-gradient(90deg, #ffffff, #4cd7f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .dd-desc {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #94a3b8;
+    margin: 0 0 20px 0;
+  }
+  .dd-btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 520px) {
+    .dd-btn-group { grid-template-columns: 1fr; }
+  }
+  .dd-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .dd-btn-primary {
+    background: #0284c7;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    border: 1px solid #38bdf8;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  }
+  .dd-btn-primary:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+  }
+  .dd-btn-secondary {
+    background: rgba(30, 41, 59, 0.8);
+    color: #f1f5f9;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+  }
+  .dd-btn-secondary:hover {
+    background: rgba(51, 65, 85, 0.9);
+    border-color: #a855f7;
+    transform: translateY(-2px);
+  }
+  .dd-icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+  .dd-btn-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .dd-btn-label {
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+  .dd-btn-sub {
+    font-size: 11px;
+    opacity: 0.85;
+    font-family: monospace;
+  }
+  .dd-preview-section {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(76, 215, 246, 0.15);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+  .dd-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    color: #4cd7f6;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .dd-tag {
+    color: #64748b;
+    font-size: 9.5px;
+  }
+  .dd-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 520px) {
+    .dd-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .dd-key {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 10px;
+    padding: 8px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    color: #f1f5f9;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    user-select: none;
+  }
+  .dd-key:hover {
+    border-color: #4cd7f6;
+    background: rgba(30, 41, 59, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 215, 246, 0.25);
+  }
+  .dd-key:active {
+    transform: scale(0.94);
+    background: #0284c7;
+    border-color: #38bdf8;
+  }
+  .dd-key-yt {
+    border-color: rgba(168, 85, 247, 0.35);
+  }
+  .dd-key-yt:hover {
+    border-color: #c084fc;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  }
+  .dd-k-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 8.5px;
+    color: #64748b;
+    font-family: monospace;
+  }
+  .dd-k-sc {
+    color: #4cd7f6;
+    font-weight: bold;
+  }
+  .dd-k-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .dd-k-name {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+  }
+  .dd-hud {
+    background: #020617;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 11px;
+    color: #34d399;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .dd-hud-prompt {
+    color: #4cd7f6;
+    font-weight: bold;
+  }
+  #dd-hud-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dd-hud-ms {
+    background: rgba(52, 211, 153, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    color: #6ee7b7;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .dd-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dd-pill {
+    font-size: 10.5px;
+    font-family: monospace;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #94a3b8;
+  }
+</style>
+
+<script>
+  function ddSimulateKey(actionName, keyId) {
+    const hud = document.getElementById('dd-hud-text');
+    const ms = document.getElementById('dd-hud-ms');
+    const randomMs = (Math.random() * 18 + 12).toFixed(1);
+
+    if (hud) {
+      hud.textContent = "DISPATCH -> [" + actionName + "]";
+    }
+    if (ms) {
+      ms.textContent = randomMs + "ms";
+    }
+
+    try {
+      fetch('http://127.0.0.1:8989/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: actionName })
+      }).then(r => r.json()).then(data => {
+        if (data && data.latencyMs) {
+          ms.textContent = data.latencyMs.toFixed(1) + "ms";
+        }
+      }).catch(function() {});
+    } catch (e) {}
+  }
+</script>

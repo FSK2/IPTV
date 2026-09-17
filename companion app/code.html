@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevDeck Studio &amp; PC Companion // Ultra-Low Latency Dual-Link Macro Deck</title>
+<!-- Google Fonts: Space Grotesk (Headlines), JetBrains Mono (Badges/Code), Geist (Body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Verbatim Tailwind Config Injection -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#141b2b",
+            "outline-variant": "#3d4944",
+            "secondary-fixed-dim": "#45dfa4",
+            "on-tertiary-fixed": "#21005e",
+            "primary-fixed": "#86f7ce",
+            "on-primary-fixed-variant": "#00513c",
+            "on-primary-container": "#006b51",
+            "on-secondary": "#003825",
+            "on-background": "#dce2f7",
+            "on-tertiary": "#381385",
+            "on-error": "#690005",
+            "inverse-primary": "#006c51",
+            "surface-container-high": "#232a3a",
+            "secondary-container": "#00bd85",
+            "on-surface": "#dce2f7",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed": "#68fcbf",
+            "inverse-surface": "#dce2f7",
+            "on-primary": "#003829",
+            "on-surface-variant": "#bccac2",
+            "surface-container-highest": "#2e3545",
+            "tertiary": "#f9f3ff",
+            "tertiary-fixed-dim": "#cebdff",
+            "on-secondary-container": "#00452e",
+            "background": "#0c1322",
+            "surface-variant": "#2e3545",
+            "surface-bright": "#323949",
+            "primary": "#d1ffea",
+            "error-container": "#93000a",
+            "inverse-on-surface": "#293040",
+            "surface": "#0c1322",
+            "surface-container-lowest": "#070e1d",
+            "primary-container": "#7bedc4",
+            "on-tertiary-container": "#674bb5",
+            "outline": "#87948d",
+            "tertiary-container": "#dfd2ff",
+            "error": "#ffb4ab",
+            "on-tertiary-fixed-variant": "#4f319c",
+            "tertiary-fixed": "#e8ddff",
+            "surface-dim": "#0c1322",
+            "secondary": "#45dfa4",
+            "on-secondary-fixed": "#002114",
+            "surface-container": "#191f2f",
+            "surface-tint": "#68dbb3",
+            "on-secondary-fixed-variant": "#005137",
+            "primary-fixed-dim": "#68dbb3",
+            "on-primary-fixed": "#002116"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-2xs": "0.25rem",
+            "space-4xl": "6rem",
+            "container-max": "80rem",
+            "space-3xl": "4rem",
+            "gutter-desktop": "2rem",
+            "space-sm": "0.75rem",
+            "gutter-mobile": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.5rem",
+            "space-2xl": "3rem"
+          },
+          "fontFamily": {
+            "display-hero": [
+              "Space Grotesk"
+            ],
+            "label-mono-xs": [
+              "JetBrains Mono"
+            ],
+            "headline-lg-mobile": [
+              "Space Grotesk"
+            ],
+            "headline-lg": [
+              "Space Grotesk"
+            ],
+            "body-sm": [
+              "Geist"
+            ],
+            "body-lg": [
+              "Geist"
+            ],
+            "headline-md": [
+              "Space Grotesk"
+            ],
+            "body-md": [
+              "Geist"
+            ],
+            "headline-sm": [
+              "Space Grotesk"
+            ],
+            "label-mono-lg": [
+              "JetBrains Mono"
+            ],
+            "label-mono-md": [
+              "JetBrains Mono"
+            ],
+            "display-hero-mobile": [
+              "Space Grotesk"
+            ]
+          },
+          "fontSize": {
+            "display-hero": [
+              "64px",
+              {
+                "lineHeight": "72px",
+                "letterSpacing": "-0.03em",
+                "fontWeight": "700"
+              }
+            ],
+            "label-mono-xs": [
+              "10px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.08em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg-mobile": [
+              "28px",
+              {
+                "lineHeight": "36px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg": [
+              "36px",
+              {
+                "lineHeight": "44px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-sm": [
+              "13px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-lg": [
+              "18px",
+              {
+                "lineHeight": "28px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-md": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-md": [
+              "15px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-sm": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "fontWeight": "500"
+              }
+            ],
+            "label-mono-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "label-mono-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.04em",
+                "fontWeight": "500"
+              }
+            ],
+            "display-hero-mobile": [
+              "40px",
+              {
+                "lineHeight": "48px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Arctic Matrix & Cyber Scanlines Background */
+    .bg-matrix-pattern {
+      background-color: #0b0f19;
+      background-image: radial-gradient(rgba(123, 237, 196, 0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Hardware Macro Key Glow Pulse */
+    .macro-key-active:active {
+      transform: scale(0.96);
+      box-shadow: 0 0 16px rgba(123, 237, 196, 0.5), inset 0 0 8px rgba(123, 237, 196, 0.4);
+    }
+
+    /* Terminal Custom Scrollbar */
+    .terminal-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .terminal-scroll::-webkit-scrollbar-track {
+      background: #070e1d;
+    }
+    .terminal-scroll::-webkit-scrollbar-thumb {
+      background: #3d4944;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen bg-matrix-pattern selection:bg-primary-container selection:text-on-primary-fixed antialiased overflow-x-hidden">
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT 1: TopNavBar (Web Header) -->
+<!-- ========================================================================= -->
+<header class="docked full-width top-0 sticky z-50 bg-surface-container-lowest/80 dark:bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+<div class="flex justify-between items-center w-full px-6 py-3.5 max-w-container-max mx-auto">
+<!-- Brand Logo & Realtime Local Port Status Tag -->
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2.5 group" href="#">
+<div class="w-8 h-8 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary-container group-hover:border-primary-container transition-colors shadow-[0_0_12px_rgba(123,237,196,0.15)]">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary tracking-tight">DevDeck Studio</span>
+</a>
+<!-- Port Indicator Badge -->
+<div class="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container border border-outline-variant/50">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="text-label-mono-xs font-label-mono-xs text-secondary tracking-wider">PORT 8989 ACTIVE // ZERO-DROP TCP</span>
+</div>
+</div>
+<!-- Center Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-secondary dark:text-secondary border-b-2 border-secondary font-label-mono-md pb-1 hover:text-primary dark:hover:text-primary transition-all duration-150" href="#features">Features</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-mono-md hover:text-on-surface hover:text-primary dark:hover:text-primary transition-all duration-150" href="#dual-link">Dual-Link</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-mono-md hover:text-on-surface hover:text-primary dark:hover:text-primary transition-all duration-150" href="#ecosystem">Ecosystem</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-mono-md hover:text-on-surface hover:text-primary dark:hover:text-primary transition-all duration-150" href="#docs">Docs</a>
+</nav>
+<!-- Right CTAs -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex items-center gap-1 text-on-surface-variant font-label-mono-xs px-2 py-1 rounded bg-surface-container-high/60 border border-outline-variant/40">
+<span class="material-symbols-outlined text-[14px] text-secondary">wifi_tethering</span>
+<span>Port 8989 Live</span>
+</div>
+<a class="flex items-center gap-2 bg-primary-container text-on-primary font-label-mono-md px-4 py-2 rounded font-semibold hover:shadow-[0_0_20px_rgba(123,237,196,0.4)] active:scale-98 transition-all duration-150" href="#download">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Download Companion</span>
+</a>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- HERO SECTION: Dual-Link Macro Deck & Live Studio Showcase -->
+<!-- ========================================================================= -->
+<section class="relative pt-12 md:pt-20 pb-20 px-6 max-w-container-max mx-auto overflow-hidden">
+<!-- Ambient Cyber Violet & Mint Glow Spheres in background -->
+<div class="absolute top-10 left-1/4 w-96 h-96 bg-primary-container/10 blur-[130px] -z-10 pointer-events-none rounded-full"></div>
+<div class="absolute top-40 right-10 w-96 h-96 bg-tertiary-container/10 blur-[150px] -z-10 pointer-events-none rounded-full"></div>
+<div class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
+<!-- Monospace Pill Indicator -->
+<div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-container-high/80 border border-outline-variant/60 shadow-[0_0_12px_rgba(123,237,196,0.1)] mb-6">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="font-label-mono-xs text-label-mono-xs text-primary tracking-widest uppercase">
+          v1.0 STABLE // ULTRA-LOW LATENCY LOCAL TCP PROTOCOL
+        </span>
+</div>
+<!-- Main Headline -->
+<h1 class="font-display-hero text-headline-lg-mobile md:text-display-hero text-primary tracking-tight mb-6">
+        DEVDECK STUDIO <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-secondary to-tertiary-container">
+          The Ultimate Dual-Link Macro Deck
+        </span>
+</h1>
+<!-- Subtitle -->
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10 leading-relaxed">
+        Turn your Android device into an ultra-low-latency 24-tactile macro deck, precision laptop trackpad, and YouTube studio controller. Powered by our zero-drop PC Companion.
+      </p>
+<!-- Dual Primary Action Buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-xl">
+<a class="w-full sm:w-auto flex flex-col items-center justify-center bg-primary-container text-on-primary px-6 py-3.5 rounded hover:shadow-[0_0_24px_rgba(123,237,196,0.45)] transition-all duration-200 group" href="#download-windows">
+<div class="flex items-center gap-2.5 font-label-mono-md text-label-mono-md font-bold tracking-tight text-on-primary">
+<span class="material-symbols-outlined text-[20px]">desktop_windows</span>
+<span>Download PC Companion (.exe / .zip)</span>
+</div>
+<span class="text-[11px] font-mono text-on-primary/80 mt-0.5">v1.0 • Windows 10/11 • 15KB lightweight</span>
+</a>
+<a class="w-full sm:w-auto flex items-center justify-center gap-3 bg-surface-container-high/60 border border-outline-variant hover:border-tertiary-container text-on-surface px-6 py-4 rounded hover:shadow-[0_0_20px_rgba(167,139,250,0.25)] transition-all duration-200" href="https://play.google.com/store/apps/dev?id=7805709897107019380" target="_blank" rel="noopener noreferrer">
+<span class="material-symbols-outlined text-tertiary text-[20px]">shop_two</span>
+<div class="text-left">
+<div class="text-[10px] font-mono text-tertiary tracking-wider uppercase">Android App</div>
+<div class="font-label-mono-md text-label-mono-md font-semibold text-on-surface">Get on Google Play</div>
+</div>
+</a>
+</div>
+<!-- Quick Metrics Row -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 pt-8 border-t border-outline-variant/30 w-full">
+<div class="flex flex-col items-center">
+<span class="font-label-mono-lg text-label-mono-lg font-bold text-secondary tracking-tight">&lt;0.8ms</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Local Latency</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-mono-lg text-label-mono-lg font-bold text-primary tracking-tight">Zero Cloud</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">100% Offline Socket</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-mono-lg text-label-mono-lg font-bold text-tertiary tracking-tight">24 Tactile</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Multi-Action Keys</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-mono-lg text-label-mono-lg font-bold text-secondary-fixed-dim tracking-tight">15KB</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Portable Win32 Daemon</span>
+</div>
+</div>
+</div>
+<!-- ======================================================================= -->
+<!-- HERO INTERACTIVE MOCKUP DISPLAY: Android Pad + Windows 11 PC Companion -->
+<!-- ======================================================================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-6">
+<!-- LEFT / MAIN PANE: Simulated Android DevDeck Tablet (7 Cols) -->
+<div class="lg:col-span-7 bg-surface-container-low/90 backdrop-blur-xl border border-outline-variant/60 rounded-xl p-5 md:p-6 shadow-[0_16px_48px_rgba(0,0,0,0.8)] relative">
+<!-- Hardware Chassis Top Bar / Phone Status -->
+<div class="flex items-center justify-between pb-4 mb-4 border-b border-outline-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">stay_current_landscape</span>
+<span class="font-label-mono-xs text-label-mono-xs text-primary font-bold">DEVDECK CLIENT v1.0.0</span>
+<span class="text-on-surface-variant text-[11px] font-mono">| 192.168.1.104</span>
+</div>
+<!-- Dynamic Mode Toggle Tabs on Android Deck -->
+<div class="flex items-center bg-surface-container-lowest p-1 rounded border border-outline-variant/40">
+<button class="px-2.5 py-1 text-label-mono-xs font-label-mono-xs bg-primary-container text-on-primary font-bold rounded">DECK</button>
+<button class="px-2.5 py-1 text-label-mono-xs font-label-mono-xs text-on-surface-variant hover:text-on-surface">TRACKPAD</button>
+<button class="px-2.5 py-1 text-label-mono-xs font-label-mono-xs text-on-surface-variant hover:text-on-surface">SCRATCHPAD</button>
+</div>
+</div>
+<!-- Layer Selector Pills (Stream / Code / Edit / Media) -->
+<div class="flex items-center justify-between gap-2 mb-4 bg-surface-container-lowest/70 p-2 rounded border border-outline-variant/30">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-label-mono-xs text-outline tracking-wider">ACTIVE LAYER:</span>
+<span class="px-2 py-0.5 rounded text-label-mono-xs font-label-mono-xs font-bold bg-secondary/15 text-secondary border border-secondary/30">L1: STREAM &amp; YOUTUBE</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-6 h-6 rounded flex items-center justify-center font-mono text-xs bg-surface-container text-primary hover:border hover:border-primary">1</button>
+<button class="w-6 h-6 rounded flex items-center justify-center font-mono text-xs bg-surface-container text-outline hover:text-on-surface">2</button>
+<button class="w-6 h-6 rounded flex items-center justify-center font-mono text-xs bg-surface-container text-outline hover:text-on-surface">3</button>
+<button class="w-6 h-6 rounded flex items-center justify-center font-mono text-xs bg-surface-container text-outline hover:text-on-surface">4</button>
+</div>
+</div>
+<!-- 24-Tactile Macro Key Matrix (Grid 6x4) -->
+<div class="grid grid-cols-3 sm:grid-cols-6 gap-2.5" id="macroDeckGrid">
+<!-- Key 1: OBS Rec -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-error hover:shadow-[0_0_12px_rgba(244,63,94,0.3)] transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px] group">
+<span class="material-symbols-outlined text-error text-[22px] group-hover:scale-110 transition-transform">radio_button_checked</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">OBS REC</span>
+</div>
+<!-- Key 2: Mute Mic -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-secondary hover:shadow-[0_0_12px_rgba(123,237,196,0.3)] transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px] group">
+<span class="material-symbols-outlined text-secondary text-[22px] group-hover:scale-110 transition-transform">mic_off</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">MUTE MIC</span>
+</div>
+<!-- Key 3: YouTube Like -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-error hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px] group">
+<span class="material-symbols-outlined text-error text-[22px] group-hover:scale-110 transition-transform">thumb_up</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">YT LIKE</span>
+</div>
+<!-- Key 4: Skip Ad -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-tertiary-container hover:shadow-[0_0_12px_rgba(167,139,250,0.3)] transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px] group">
+<span class="material-symbols-outlined text-tertiary-container text-[22px] group-hover:scale-110 transition-transform">fast_forward</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">SKIP AD</span>
+</div>
+<!-- Key 5: Camera Angle 1 -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-primary-container transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-primary-container text-[22px]">videocam</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">CAM 01</span>
+</div>
+<!-- Key 6: Camera Angle 2 -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-primary-container transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-primary-container text-[22px]">switch_video</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">CAM 02</span>
+</div>
+<!-- Key 7: Discord Deafen -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-tertiary transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-tertiary text-[22px]">headphones</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">DEAFEN</span>
+</div>
+<!-- Key 8: VS Code Format -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-secondary transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-secondary text-[22px]">code</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">PRETTIER</span>
+</div>
+<!-- Key 9: Git Push -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-secondary transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-secondary text-[22px]">upload_file</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">GIT PUSH</span>
+</div>
+<!-- Key 10: Docker Up -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-primary-container transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-primary-container text-[22px]">deployed_code</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">COMPOSE</span>
+</div>
+<!-- Key 11: Play / Pause -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-on-surface text-[22px]">play_circle</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">MEDIA PL</span>
+</div>
+<!-- Key 12: Next Track -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-on-surface text-[22px]">skip_next</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">NEXT TRK</span>
+</div>
+<!-- Key 13: Premiere Render -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-tertiary-container transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-tertiary-container text-[22px]">movie_edit</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">EXPORT</span>
+</div>
+<!-- Key 14: Screenshot -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-outline text-[22px]">screenshot_region</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">SNIP OCR</span>
+</div>
+<!-- Key 15: Color Picker -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-outline text-[22px]">colorize</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">EYEDROP</span>
+</div>
+<!-- Key 16: Volume Up -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-on-surface text-[22px]">volume_up</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">VOL +5%</span>
+</div>
+<!-- Key 17: Volume Down -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-on-surface text-[22px]">volume_down</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">VOL -5%</span>
+</div>
+<!-- Key 18: Browser Reload -->
+<div class="macro-key-active cursor-pointer p-3 rounded bg-surface-container border border-outline-variant/40 hover:border-outline transition-all flex flex-col items-center justify-center gap-1.5 min-h-[76px]">
+<span class="material-symbols-outlined text-on-surface text-[22px]">refresh</span>
+<span class="text-[10px] font-mono text-on-surface text-center font-bold tracking-tight leading-tight">HARD REL</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/30 flex justify-between items-center text-label-mono-xs text-on-surface-variant">
+<span>TCP Socket Link // Subnet 255.255.255.0</span>
+<span class="text-secondary font-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 0 PACKET LOSS
+          </span>
+</div>
+</div>
+<!-- RIGHT / SECONDARY FLOATING PANE: Windows 11 PC Companion (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-4">
+<!-- Windows Companion Window Frame -->
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
+<!-- Titlebar Window Chrome -->
+<div class="bg-surface-container-low px-4 py-2.5 flex items-center justify-between border-b border-outline-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[16px]">desktop_windows</span>
+<span class="font-label-mono-xs font-label-mono-xs text-primary font-bold">DevDeck Companion v1.0.0 [x64]</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-error/70"></span>
+</div>
+</div>
+<!-- Companion Status Readout -->
+<div class="p-5 space-y-4">
+<div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/40">
+<div>
+<div class="text-[11px] font-mono text-on-surface-variant uppercase">Local TCP Daemon</div>
+<div class="font-label-mono-md text-label-mono-md text-primary font-bold">LISTENING ON 0.0.0.0:8989</div>
+</div>
+<div class="text-right">
+<span class="px-2 py-1 rounded bg-secondary/15 text-secondary text-label-mono-xs font-mono font-bold">READY</span>
+</div>
+</div>
+<!-- Connected Client Details -->
+<div class="p-3 rounded bg-surface-container-low border border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[18px]">smartphone</span>
+</div>
+<div>
+<div class="font-label-mono-xs text-on-surface font-bold">Google Pixel 8 Pro</div>
+<div class="text-[11px] font-mono text-on-surface-variant">Client IP: 192.168.1.104:54890</div>
+</div>
+</div>
+<div class="text-right font-mono">
+<div class="text-secondary font-bold text-xs">~0.4ms</div>
+<div class="text-[10px] text-outline">RTT LATENCY</div>
+</div>
+</div>
+<!-- Realtime Console Stream -->
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="font-label-mono-xs text-on-surface-variant uppercase tracking-wider">Real-Time Inbound RPC Logs:</span>
+<span class="font-label-mono-xs text-outline text-[10px]">Buffer: 50 msgs</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded border border-outline-variant/50 font-label-mono-xs text-[11px] space-y-1.5 h-36 overflow-y-auto terminal-scroll text-on-surface-variant">
+<div class="text-outline">[19:42:01.002] <span class="text-secondary">SYS_INIT</span>: Daemon bound to Port 8989 (Dual-Stack IPv4/IPv6).</div>
+<div class="text-outline">[19:42:04.120] <span class="text-primary">NET_DISC</span>: Handshake ACK verified from 192.168.1.104.</div>
+<div>[19:42:08.455] <span class="text-tertiary-container">EXEC_KEY</span>: DirectInput -&gt; {CTRL+ALT+SHIFT+F} [PRETTIER]</div>
+<div>[19:42:11.902] <span class="text-tertiary-container">EXEC_KEY</span>: DirectInput -&gt; {MEDIA_PLAY_PAUSE} [SUCCESS]</div>
+<div class="text-secondary">[19:42:14.218] <span class="text-secondary-fixed">RPC_YOUTUBE</span>: Command "SKIP_AD" executed in active tab (0.1ms).</div>
+<div class="animate-pulse text-primary-container">&gt; Listening for RPC triggers...</div>
+</div>
+</div>
+<!-- Quick Daemon Toggles -->
+<div class="pt-2 flex items-center justify-between text-label-mono-xs">
+<label class="flex items-center gap-2 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input checked="" class="rounded-sm bg-surface-container-lowest border-outline-variant text-primary-container focus:ring-0" type="checkbox"/>
+<span>Start with Windows</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input checked="" class="rounded-sm bg-surface-container-lowest border-outline-variant text-primary-container focus:ring-0" type="checkbox"/>
+<span>DirectInput Keystrokes</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Latency Guarantee Badge -->
+<div class="p-3.5 rounded bg-surface-container-low/70 border border-outline-variant/40 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[24px]">bolt</span>
+<div class="text-xs text-on-surface-variant">
+<span class="font-bold text-on-surface font-mono">Zero Background Sleep Guarantee:</span> The DevDeck engine implements local raw sockets to prevent OS power-saving dropouts.
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- KEY FEATURE GRID: 4-Card Bento Matrix -->
+<!-- ========================================================================= -->
+<section class="py-20 px-6 max-w-container-max mx-auto border-t border-outline-variant/30" id="features">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-14">
+<div>
+<div class="inline-flex items-center gap-2 font-label-mono-xs text-label-mono-xs text-secondary uppercase tracking-widest mb-3">
+<span class="material-symbols-outlined text-[14px]">tune</span> Core Architecture
+        </div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">
+          Engineered for Zero Dropped Packets.
+        </h2>
+</div>
+<p class="font-body-md text-on-surface-variant max-w-md mt-4 md:mt-0">
+        Bluetooth drops when you look away. DevDeck was built on local socket architecture so every tap is instant, every session is permanent.
+      </p>
+</div>
+<!-- 4-Card Matrix Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- CARD 1: Zero-Drop Wi-Fi Link -->
+<div class="p-8 rounded-xl bg-surface-container-low/70 backdrop-blur-md border border-outline-variant/50 hover:border-primary-container/70 transition-all duration-300 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full pointer-events-none group-hover:bg-primary-container/10 transition-colors"></div>
+<div class="w-12 h-12 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary-container mb-6 shadow-[0_0_16px_rgba(123,237,196,0.15)]">
+<span class="material-symbols-outlined text-[26px]">wifi_tethering</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Zero-Drop Wi-Fi Link</h3>
+<p class="font-body-md text-on-surface-variant mb-6">
+          Never suffer from Bluetooth sleep or OS power-saving disconnects again. Rock-solid TCP local link that stays awake across deep sleep states with automatic sub-millisecond reconnection.
+        </p>
+<!-- Benchmark Simulation Pill -->
+<div class="p-3 rounded bg-surface-container-lowest border border-outline-variant/40 font-label-mono-xs flex items-center justify-between">
+<span class="text-on-surface-variant">Benchmark Ping: 10,000 requests</span>
+<span class="text-secondary font-bold">0.00% packet drop (0.42ms avg)</span>
+</div>
+</div>
+<!-- CARD 2: Native YouTube Matrix -->
+<div class="p-8 rounded-xl bg-surface-container-low/70 backdrop-blur-md border border-outline-variant/50 hover:border-error/70 transition-all duration-300 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-error/5 rounded-bl-full pointer-events-none group-hover:bg-error/10 transition-colors"></div>
+<div class="w-12 h-12 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-error mb-6 shadow-[0_0_16px_rgba(244,63,94,0.15)]">
+<span class="material-symbols-outlined text-[26px]">smart_display</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Native YouTube Studio Matrix</h3>
+<p class="font-body-md text-on-surface-variant mb-6">
+          Dedicated one-tap Like, Share, Save to Playlist, and Skip Ad automation for creators &amp; power streamers. Control full viewport playback without ever losing window focus.
+        </p>
+<!-- Key Cluster Simulation -->
+<div class="grid grid-cols-4 gap-2">
+<div class="p-2 rounded bg-surface-container text-center font-mono text-xs text-on-surface border border-outline-variant/40">👍 Like</div>
+<div class="p-2 rounded bg-surface-container text-center font-mono text-xs text-on-surface border border-outline-variant/40">🔗 Share</div>
+<div class="p-2 rounded bg-surface-container text-center font-mono text-xs text-on-surface border border-outline-variant/40">⏩ Skip Ad</div>
+<div class="p-2 rounded bg-surface-container text-center font-mono text-xs text-on-surface border border-outline-variant/40">📂 Save</div>
+</div>
+</div>
+<!-- CARD 3: 4-Layer Tactile Deck -->
+<div class="p-8 rounded-xl bg-surface-container-low/70 backdrop-blur-md border border-outline-variant/50 hover:border-secondary/70 transition-all duration-300 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full pointer-events-none group-hover:bg-secondary/10 transition-colors"></div>
+<div class="w-12 h-12 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary mb-6 shadow-[0_0_16px_rgba(69,223,164,0.15)]">
+<span class="material-symbols-outlined text-[26px]">grid_view</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">4-Layer Tactile Deck</h3>
+<p class="font-body-md text-on-surface-variant mb-6">
+          24 customizable tactile macro keys per page, text scratchpad typing, custom key combinations, and IDE shortcuts with instant Layer cycling for streaming, editing, and coding.
+        </p>
+<!-- Layer switcher UI preview -->
+<div class="flex items-center gap-2 font-label-mono-xs text-xs">
+<span class="px-2 py-1 rounded bg-secondary/20 text-secondary font-bold">STREAM</span>
+<span class="px-2 py-1 rounded bg-surface-container text-outline">CODE</span>
+<span class="px-2 py-1 rounded bg-surface-container text-outline">EDIT</span>
+<span class="px-2 py-1 rounded bg-surface-container text-outline">GENERAL</span>
+<span class="ml-auto text-on-surface-variant font-mono">96 Total Actions</span>
+</div>
+</div>
+<!-- CARD 4: Precision Trackpad & Inertia Scroll -->
+<div class="p-8 rounded-xl bg-surface-container-low/70 backdrop-blur-md border border-outline-variant/50 hover:border-tertiary-container/70 transition-all duration-300 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary-container/5 rounded-bl-full pointer-events-none group-hover:bg-tertiary-container/10 transition-colors"></div>
+<div class="w-12 h-12 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-tertiary mb-6 shadow-[0_0_16px_rgba(167,139,250,0.15)]">
+<span class="material-symbols-outlined text-[26px]">mouse</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Precision Laptop Trackpad</h3>
+<p class="font-body-md text-on-surface-variant mb-6">
+          Smooth multi-touch laptop trackpad with horizontal and vertical inertia scrolling, two-finger tap for right-click, and laser drag modes with zero cursor stutter over local Wi-Fi.
+        </p>
+<!-- Stylized Trackpad Area Representation -->
+<div class="h-12 rounded bg-surface-container-lowest border border-dashed border-outline-variant/60 flex items-center justify-center gap-3 text-label-mono-xs text-outline">
+<span class="material-symbols-outlined text-[16px]">touch_app</span>
+<span>Two-Finger Tap = Right Click // Pinch to Zoom</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- 3-STEP INTERACTIVE "HOW IT WORKS" WORKFLOW -->
+<!-- ========================================================================= -->
+<section class="py-20 px-6 max-w-container-max mx-auto border-t border-outline-variant/30" id="dual-link">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<div class="inline-flex items-center gap-2 font-label-mono-xs text-label-mono-xs text-primary-container uppercase tracking-widest mb-3">
+<span class="material-symbols-outlined text-[14px]">sync_alt</span> 60-Second Setup
+      </div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">
+        Zero Config. Zero Cloud Accounts.
+      </h2>
+<p class="font-body-md text-on-surface-variant mt-3">
+        Launch the daemon on PC, tap connect on Android. Immediate raw DirectInput keystroke execution.
+      </p>
+</div>
+<!-- 3 Flow Columns with Connecting Vector Line -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+<!-- Step 1 -->
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col relative">
+<div class="flex items-center justify-between mb-6">
+<span class="w-10 h-10 rounded bg-primary-container/15 border border-primary-container/40 text-primary-container font-mono font-bold flex items-center justify-center text-label-mono-lg">01</span>
+<span class="material-symbols-outlined text-outline">download_for_offline</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Run Companion on PC</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-4">
+          Download the 15KB standalone executable. Zero installer, no registry modifications, no administrator elevation. Silent background tray daemon on Windows 10 &amp; 11.
+        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/20 font-mono text-[11px] text-secondary">
+          &gt; devdeck_companion.exe --port 8989
+        </div>
+</div>
+<!-- Step 2 -->
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col relative">
+<div class="flex items-center justify-between mb-6">
+<span class="w-10 h-10 rounded bg-secondary/15 border border-secondary/40 text-secondary font-mono font-bold flex items-center justify-center text-label-mono-lg">02</span>
+<span class="material-symbols-outlined text-outline">qr_code_scanner</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Launch Android Deck</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-4">
+          Open DevDeck on any Android smartphone or tablet. The zero-config mDNS UDP broadcaster automatically discovers your PC companion or allows 1-tap local IP pairing.
+        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/20 font-mono text-[11px] text-primary">
+          &gt; mDNS beacon: PC-DESKTOP-WIN11 [FOUND]
+        </div>
+</div>
+<!-- Step 3 -->
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/40 flex flex-col relative">
+<div class="flex items-center justify-between mb-6">
+<span class="w-10 h-10 rounded bg-tertiary-container/15 border border-tertiary-container/40 text-tertiary font-mono font-bold flex items-center justify-center text-label-mono-lg">03</span>
+<span class="material-symbols-outlined text-outline">speed</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Instant Macro Command</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-4">
+          Fire OBS scene switches, Premiere timeline cuts, YouTube media controls, and VS Code compile macros. Keystrokes land on your PC with less than 1ms latency.
+        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/20 font-mono text-[11px] text-tertiary">
+          &gt; DirectInput keystroke dispatched (0.38ms)
+        </div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- CREATOR / STUDIO PROFILE & SISTER APPS (Mobile One Media) -->
+<!-- ========================================================================= -->
+<section class="py-20 px-6 max-w-container-max mx-auto border-t border-outline-variant/30" id="ecosystem">
+<div class="bg-surface-container-low/80 backdrop-blur-xl border border-outline-variant/60 rounded-2xl p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<!-- Left Column: Creator Identity & Philosophy -->
+<div class="lg:col-span-5 space-y-5">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant font-label-mono-xs text-label-mono-xs text-primary">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span>INDEPENDENT ENGINEERING PHILOSOPHY</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">
+            Created by Olivia Dunham
+          </h2>
+<div class="text-secondary font-label-mono-md text-label-mono-md">
+            Mobile One Media Ecosystem // Lead Systems Architect
+          </div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            I build specialized, zero-telemetry utility software for power users who hate bloatware. DevDeck was built out of frustration with existing companion apps that require 500MB electron runtimes, cloud logins, and constant Bluetooth dropouts during live streams and production workflows.
+          </p>
+<!-- Social Connect Pill Bar -->
+<div class="pt-4 flex flex-wrap gap-2.5">
+<a class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant/60 font-label-mono-xs text-on-surface hover:text-primary-container hover:border-primary-container transition-all flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]">smart_display</span> YouTube
+            </a>
+<a class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant/60 font-label-mono-xs text-on-surface hover:text-tertiary-container hover:border-tertiary-container transition-all flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]">photo_camera</span> Instagram
+            </a>
+<a class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant/60 font-label-mono-xs text-on-surface hover:text-secondary hover:border-secondary transition-all flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]">share</span> Facebook
+            </a>
+<a class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant/60 font-label-mono-xs text-on-surface hover:text-primary hover:border-primary transition-all flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]">terminal</span> X (Twitter)
+            </a>
+<a class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant/60 font-label-mono-xs text-on-surface hover:text-primary transition-all flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]">mail</span> Developer Email
+            </a>
+</div>
+</div>
+<!-- Right Column: Sister Apps Ecosystem -->
+<div class="lg:col-span-7 space-y-4">
+<div class="font-label-mono-xs text-label-mono-xs text-outline tracking-wider uppercase mb-2">
+            Mobile One Media Sister Utility Suite:
+          </div>
+<div class="space-y-3">
+<!-- App 1: SoundSense AI -->
+<div class="p-4 rounded-xl bg-surface-container/60 border border-outline-variant/40 hover:border-primary-container/60 transition-all flex items-start gap-4 group">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-primary-container border border-outline-variant shrink-0 group-hover:shadow-[0_0_12px_rgba(123,237,196,0.3)]">
+<span class="material-symbols-outlined text-[20px]">graphic_eq</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-primary font-semibold">SoundSense AI</h4>
+<span class="font-label-mono-xs text-secondary bg-secondary/10 px-2 py-0.5 rounded">AUDIO ENGINE</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">
+                  Real-time studio audio equalizer and neural noise gate for Discord, OBS, and recording setups with sub-2ms processing.
+                </p>
+</div>
+</div>
+<!-- App 2: Notch Bingo -->
+<div class="p-4 rounded-xl bg-surface-container/60 border border-outline-variant/40 hover:border-tertiary-container/60 transition-all flex items-start gap-4 group">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-tertiary border border-outline-variant shrink-0 group-hover:shadow-[0_0_12px_rgba(167,139,250,0.3)]">
+<span class="material-symbols-outlined text-[20px]">lens_blur</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-primary font-semibold">Notch Bingo</h4>
+<span class="font-label-mono-xs text-tertiary bg-tertiary-container/10 px-2 py-0.5 rounded">ANDROID SYSTEM</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">
+                  Interactive punch-hole status and dynamic HUD utility turning unused Android camera notches into battery &amp; telemetry indicators.
+                </p>
+</div>
+</div>
+<!-- App 3: Website Audit -->
+<div class="p-4 rounded-xl bg-surface-container/60 border border-outline-variant/40 hover:border-secondary/60 transition-all flex items-start gap-4 group">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-secondary border border-outline-variant shrink-0 group-hover:shadow-[0_0_12px_rgba(69,223,164,0.3)]">
+<span class="material-symbols-outlined text-[20px]">troubleshoot</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-primary font-semibold">Website Audit</h4>
+<span class="font-label-mono-xs text-secondary bg-secondary/10 px-2 py-0.5 rounded">DEV TOOLING</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">
+                  Lightning fast local performance, asset payload, and SEO structure inspector for web engineers and designers.
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- TECH SPECS & 100% OFFLINE PRIVACY CALLOUT -->
+<!-- ========================================================================= -->
+<section class="py-16 px-6 max-w-container-max mx-auto" id="docs">
+<div class="rounded-xl bg-surface-container-lowest border border-outline-variant p-8 relative overflow-hidden">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-outline-variant/30">
+<div>
+<div class="flex items-center gap-2 font-label-mono-xs text-secondary font-bold mb-2">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>100% OFFLINE &amp; PRIVATE ARCHITECTURE</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">No Cloud. No Accounts. No Telemetry.</h3>
+<p class="font-body-md text-on-surface-variant max-w-xl mt-1">
+            Your keystrokes and control events are strictly local TCP socket streams on your private home router subnet. Nothing touches the external internet.
+          </p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant font-label-mono-xs text-primary">Windows 10 / 11 64-bit</span>
+<span class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant font-label-mono-xs text-primary">Android 9.0+</span>
+<span class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant font-label-mono-xs text-primary">DirectInput Virtual API</span>
+<span class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant font-label-mono-xs text-primary">Port 8989 Socket</span>
+</div>
+</div>
+<!-- Quick Hash Validation Line removed -->
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT 2: OFFICIAL AGENCY FOOTER & METALLIC BRANDING -->
+<!-- ========================================================================= -->
+<footer class="w-full bottom-0 bg-[#0b0f19] border-t border-slate-800 text-slate-300 py-12 px-6">
+  <div class="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+    <!-- Left / Brand Box with Metallic Logo -->
+    <div class="flex items-center gap-5">
+      <img src="mobile_one_logo.png" alt="Mobile One Media Services Logo" class="w-16 h-16 object-contain rounded-xl shadow-2xl border border-slate-700/60 bg-black/60 p-1 hover:scale-105 transition-transform" />
+      <div>
+        <div class="text-xs uppercase tracking-widest text-emerald-400 font-mono font-semibold">Official Engineering Hub</div>
+        <h3 class="text-lg font-bold text-white tracking-tight">Mobile One Media Services</h3>
+        <p class="text-xs text-slate-400 max-w-sm mt-0.5">
+          Specialized mobile applications, companion systems &amp; low-latency desktop control software.
+        </p>
+      </div>
+    </div>
+
+    <!-- Center / Credits & Info -->
+    <div class="text-center md:text-left space-y-2">
+      <div class="text-sm font-semibold text-emerald-400 font-mono">
+        website developed by , Mobile One Media Services , <a href="https://www.mobileonemedia.com" target="_blank" rel="noopener" class="underline hover:text-emerald-300">https://www.mobileonemedia.com</a>  , <a href="mailto:info@mobileonemedia.com" class="underline hover:text-emerald-300">info@mobileonemedia.com</a> call : <a href="tel:+923486567127" class="underline hover:text-emerald-300">+923486567127</a>
+      </div>
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-mono pt-1">
+        <a href="https://www.mobileonemedia.com" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 hover:underline transition-all">
+          <span class="material-symbols-outlined text-[16px]">language</span>
+          <span>https://www.mobileonemedia.com</span>
+        </a>
+        <a href="mailto:info@mobileonemedia.com" class="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 hover:underline transition-all">
+          <span class="material-symbols-outlined text-[16px]">mail</span>
+          <span>info@mobileonemedia.com</span>
+        </a>
+        <a href="tel:+923486567127" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-bold hover:underline transition-all">
+          <span class="material-symbols-outlined text-[16px]">call</span>
+          <span>call : +923486567127</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right / Quick Action Buttons -->
+    <div class="flex flex-col sm:flex-row items-center gap-3">
+      <a href="DevDeckStudio.exe" download class="px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-300 text-xs font-mono font-bold transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/10">
+        <span class="material-symbols-outlined text-sm">download</span>
+        <span>DevDeckStudio.exe</span>
+      </a>
+      <a href="https://play.google.com/store/apps/dev?id=7805709897107019380&amp;hl=en" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-mono font-medium transition-all flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm text-amber-400">shop</span>
+        <span>Google Play</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto mt-8 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 font-mono gap-3">
+    <div>© 2026 DevDeck Studio &amp; Mobile One Media Services. All rights reserved. Zero-drop low-latency Wi-Fi protocol active.</div>
+    <div class="flex items-center gap-4">
+      <a href="https://www.mobileonemedia.com" target="_blank" class="hover:text-slate-300 transition-colors">mobileonemedia.com</a>
+      <span>•</span>
+      <a href="mailto:info@mobileonemedia.com" class="hover:text-slate-300 transition-colors">info@mobileonemedia.com</a>
+      <span>•</span>
+      <a href="tel:+923486567127" class="hover:text-slate-300 transition-colors">+923486567127</a>
+    </div>
+  </div>
+</footer>
+<!-- Light Vanilla Script for Macro Key Tactile Micro-Interactions -->
+<script>
+    document.querySelectorAll('.macro-key-active').forEach(key => {
+      key.addEventListener('click', () => {
+        key.classList.add('ring-2', 'ring-primary-container');
+        setTimeout(() => {
+          key.classList.remove('ring-2', 'ring-primary-container');
+        }, 150);
+      });
+    });
+  </script>
+</body></html>
