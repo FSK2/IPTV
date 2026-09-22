@@ -2280,7 +2280,6 @@
       } else if (typeof sendCompanionAction === 'function') {
         sendCompanionAction(cmd);
       }
-      appendToSandbox(cmd);
       showDispatchFeed(`TERMINAL: [${cmd}] typed into PC cursor`, 'CLI_EXEC');
       speakFeedback(cmd);
     }
