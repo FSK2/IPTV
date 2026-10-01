@@ -921,7 +921,8 @@ FADE OUT.`;
 let isSubmittingSequence = false;
 
 function handleSequenceCreate(event) {
-    event.preventDefault();
+    const e = event || window.event;
+    if (e && e.preventDefault) e.preventDefault();
     if (isSubmittingSequence) return;
     isSubmittingSequence = true;
 
@@ -1225,7 +1226,8 @@ function fillDemoAuth() {
 }
 
 function handleAuthSubmit(event) {
-    event.preventDefault();
+    const e = event || window.event;
+    if (e && e.preventDefault) e.preventDefault();
     const mode = document.getElementById("authMode") ? document.getElementById("authMode").value : "signin";
     const email = document.getElementById("authEmail") ? document.getElementById("authEmail").value.trim() : "";
     const pass = document.getElementById("authPassword") ? document.getElementById("authPassword").value : "";
